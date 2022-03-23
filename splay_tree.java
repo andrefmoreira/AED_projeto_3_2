@@ -129,7 +129,7 @@ static class Arvore
 
 
 
-    No oferta(No raiz, No no, String nome_procura , String oferta) 
+    No oferta(No no, String nome_procura , String oferta) 
     {
         //Chegamos ao fim e nao foi encontrado
         if (no == null)
@@ -139,12 +139,12 @@ static class Arvore
         }
         //Novo no e mais pequeno que o atual ir para a esquerda
         if (no.artigo.nome.compareTo(nome_procura) > 0)
-            no.esquerda = oferta(raiz , no.esquerda, nome_procura , oferta);
+            no.esquerda = oferta(no.esquerda, nome_procura , oferta);
         
 
         //Novo no e maior que o atual, ir para a direita
         else if (no.artigo.nome.compareTo(nome_procura) < 0)
-            no.direita = oferta(raiz, no.direita, nome_procura , oferta);
+            no.direita = oferta(no.direita, nome_procura , oferta);
 
 
         //Encontramos um no igual    
@@ -152,8 +152,7 @@ static class Arvore
         {   
             no.artigo.oferta = oferta;
             System.out.println("OFERTA ATUALIZADA");
-            //apos atualizar a oferta realizamos splaying ao no
-            raiz = splay(raiz, no.artigo.nome);
+            Global.oferta_atualizada++;
             return no;
         }
         return no;
@@ -202,7 +201,7 @@ static class Arvore
             //Elemento mais pequeno ir para a esquerda (ZIGZIG)
             if(no.artigo.nome.compareTo(nome) > 0)
             {
-                //Fazer recursao ate chegar ao ultimo elemento
+                //Fazer recursao ate encontrar o elemento
                 no.esquerda.esquerda = splay(no.esquerda.esquerda , nome);
                 no = rotacao_direita(no);
             }
@@ -293,7 +292,13 @@ static class Arvore
         }
 
         if(parametros[0].equals("OFERTA"))
-            raiz.oferta(raiz.raiz , raiz.raiz , parametros[1] , parametros[2]);
+            raiz.oferta(raiz.raiz , parametros[1] , parametros[2]);
+
+            if(Global.oferta_atualizada == 1)
+            {   
+                Global.oferta_atualizada = 0;
+                raiz.raiz = raiz.splay(raiz.raiz , parametros[1]);
+            }
 
 
         if(parametros[0].equals("CONSULTA"))
@@ -330,7 +335,7 @@ static class Arvore
 
         if(parametros[0].equals("APAGA"))
         {
-            System.out.println("CATALAGO APAGADO");
+            System.out.println("CATALOGO APAGADO");
             raiz.raiz = null;
             
         }
