@@ -152,6 +152,7 @@ static class Arvore
         {   
             no.artigo.oferta = oferta;
             System.out.println("OFERTA ATUALIZADA");
+            //apos atualizar a oferta realizamos splaying ao no
             raiz = splay(raiz, no.artigo.nome);
             return no;
         }
@@ -167,10 +168,7 @@ static class Arvore
             System.out.println("NOVO ARTIGO INSERIDO");
             Global.inserido++;
             return (new No(artigo));
-            
         } 
-        
-
         //Novo no e mais pequeno que o atual ir para a esquerda
         if (no.artigo.nome.compareTo(artigo.nome) > 0)
             no.esquerda = artigo(no.esquerda, artigo);
@@ -191,21 +189,24 @@ static class Arvore
     }
 
     No splay(No no, String nome)
-    {
+    {   
+        //Raiz ainda nao existe ou o elemento e logo a raiz.
         if(no == null || no.artigo.nome.equals(nome))
             return no;
         
+        //Elemento mais pequeno ir para a esquerda (ZIG)
         if(no.artigo.nome.compareTo(nome) > 0) 
         {
             if (no.esquerda == null) 
                 return no;
-
+            //Elemento mais pequeno ir para a esquerda (ZIGZIG)
             if(no.artigo.nome.compareTo(nome) > 0)
             {
+                //Fazer recursao ate nao chegar ao ultimo elemento
                 no.esquerda.esquerda = splay(no.esquerda.esquerda , nome);
-
                 no = rotacao_direita(no);
-            } 
+            }
+            //Elemento maior ir para a direita (ZIGZAG) 
             else if(no.artigo.nome.compareTo(nome) < 0)
             {
                 no.esquerda.direita = splay(no.esquerda.direita , nome);
@@ -218,12 +219,12 @@ static class Arvore
             no : rotacao_direita(no);
 
         }
-
+        //Elemento maior ir para a direita (ZIG)
         else
         {
             if (no.direita == null)
                 return no;
-             
+             //Elemento maior ir para a direita (ZIGZIG) 
             if(no.artigo.nome.compareTo(nome) > 0)
             {
                 no.direita.esquerda = splay(no.direita.esquerda , nome);
@@ -231,6 +232,7 @@ static class Arvore
                 if(no.direita.esquerda != null)
                    no.direita =  rotacao_direita(no.direita);
             }
+             //Elemento mais pequeno ir para a esquerda (ZIGZAG)
             else if(no.artigo.nome.compareTo(nome) < 0)
             {   
                 no.direita.direita = splay(no.direita.direita , nome);
@@ -282,16 +284,14 @@ static class Arvore
             if(Global.inserido == 1)
             {
                 Global.inserido = 0;
+                //apos inserir um elemento realizamos splaying a esse elemento
                 raiz.raiz = raiz.splay(raiz.raiz, art.nome);
             }
-
-            
         }
 
         if(parametros[0].equals("OFERTA"))
-        {
             raiz.oferta(raiz.raiz , raiz.raiz , parametros[1] , parametros[2]);
-        }
+
 
         if(parametros[0].equals("CONSULTA"))
         {   
@@ -301,6 +301,7 @@ static class Arvore
             {   
                 System.out.println("FIM");
                 Global.encontrado = 0;
+                //apos consultar um elemento realizamos splaying a esse elemento
                 raiz.raiz = raiz.splay(raiz.raiz , parametros[1]);
             }
 
@@ -310,18 +311,18 @@ static class Arvore
         {
            ArrayList<Artigo> elementos = new ArrayList<>();
            if(raiz.raiz == null)
-            System.out.println("FIM");
+                System.out.println("FIM");
            else
            {
-           raiz.raiz.printInOrder(elementos , raiz.raiz);
-           Collections.sort(elementos);
+                raiz.raiz.printInOrder(elementos , raiz.raiz);
+                Collections.sort(elementos);
 
-           for(int i = 0 ; i < elementos.size() ; i ++)
-           {    
-            System.out.print(elementos.get(i).toString());
-           }
-           System.out.println("FIM");
-        }
+                for(int i = 0 ; i < elementos.size() ; i ++)
+                {    
+                    System.out.print(elementos.get(i).toString());
+                }
+                System.out.println("FIM");
+            }
         }
 
         if(parametros[0].equals("APAGA"))
@@ -342,7 +343,6 @@ static class Arvore
 
     public static void main(String[] args) 
     {   
-
         Arvore tree = new Arvore();
         Scanner sc = new Scanner(System.in);
 
