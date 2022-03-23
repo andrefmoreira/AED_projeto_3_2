@@ -202,7 +202,7 @@ static class Arvore
             //Elemento mais pequeno ir para a esquerda (ZIGZIG)
             if(no.artigo.nome.compareTo(nome) > 0)
             {
-                //Fazer recursao ate nao chegar ao ultimo elemento
+                //Fazer recursao ate chegar ao ultimo elemento
                 no.esquerda.esquerda = splay(no.esquerda.esquerda , nome);
                 no = rotacao_direita(no);
             }
@@ -215,9 +215,10 @@ static class Arvore
                    no.esquerda = rotacao_esquerda(no.esquerda);
             }  
 
-            return (no.esquerda == null) ?
-            no : rotacao_direita(no);
-
+            if (no.esquerda == null)
+                return no;
+            else
+                return rotacao_direita(no);
         }
         //Elemento maior ir para a direita (ZIG)
         else
@@ -239,8 +240,10 @@ static class Arvore
                 no = rotacao_esquerda(no);
             }
 
-            return (no.direita == null) ?
-            no : rotacao_esquerda(no);
+            if (no.direita == null)
+                return no;
+            else
+                return rotacao_esquerda(no);
         }    
     }
 
